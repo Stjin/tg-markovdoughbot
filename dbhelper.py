@@ -78,7 +78,7 @@ def delete_model(chat_id):
         cursor = conn.cursor()
 
         # execute SQL query using execute() method.
-        query = 'DELETE FROM messages WHERE chatid = %s'
+        query = 'DELETE FROM messages WHERE chat_id = %s'
         cursor.execute(query, (chat_id,))
         conn.commit()
         cursor.close()

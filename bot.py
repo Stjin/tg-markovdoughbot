@@ -4,6 +4,7 @@ import os
 from telegram.ext import CommandHandler, Updater, MessageHandler, Filters
 
 import speech
+from users import isAdmin
 
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -62,9 +63,12 @@ def handle_message(update, context):
 
 
 def remove_messages(update, context):
-    message = update.effective_message
-    logger.info(f'remove cmd called by chat {message.chat.id}')
-    speech.delete_model(message.chat)
+    if isAdmin(update, context):
+        message = update.effective_message
+        logger.info(f'remove_messages cmd called by chat {message.chat.id}')
+        speech.delete_model(message.chat)
+    else:
+        update.effective_message.reply_text("You are not an admin")
 
 
 def get_version(update, context):
@@ -72,6 +76,13 @@ def get_version(update, context):
 
     logger.info(f'version cmd called by chat {message.chat.id}')
     update.effective_message.reply_text("2022.11.11")
+
+
+def remove_messages_confirm(update, context):
+    message = update.effective_message
+
+    logger.info(f'remove_messages_confirm cmd called by chat {message.chat.id}')
+    update.effective_message.reply_text("Use the command (slash)removeallthedataiamreallysure to flush this group's data")
 
 
 # CHECK THE COMMANDS VARIABLE IN THE TOP OF THIS FILE
@@ -90,7 +101,8 @@ if __name__ == "__main__":
     dp.add_handler(CommandHandler('start', start))
     dp.add_handler(CommandHandler('help', help))
     dp.add_handler(CommandHandler('markov', generate_sentence))
-    dp.add_handler(CommandHandler('remove', remove_messages))
+    dp.add_handler(CommandHandler('remove', remove_messages_confirm))
+    dp.add_handler(CommandHandler('removeallthedataiamreallysure', remove_messages))
     dp.add_handler(CommandHandler('version', get_version))
     dp.add_handler(MessageHandler(Filters.text, handle_message))
     # Start the webhook
