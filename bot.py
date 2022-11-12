@@ -67,6 +67,7 @@ def remove_messages(update, context):
         message = update.effective_message
         logger.info(f'remove_messages cmd called by chat {message.chat.id}')
         speech.delete_model(message.chat)
+        update.effective_message.reply_text("All data removed!!")
     else:
         update.effective_message.reply_text("You are not an admin")
 
