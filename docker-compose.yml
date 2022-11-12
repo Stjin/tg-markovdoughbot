@@ -1,0 +1,21 @@
+version: "1"
+
+services:
+  bot:
+    build:
+      context: ""
+      dockerfile: Dockerfile
+    environment:
+      - DB_HOST=${DB_HOST}
+      - DB_NAME=${DB_NAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_USERNAME=${DB_USERNAME}
+      - PORT=${PORT}
+      - EXT_PORT=${EXT_PORT}
+      - WEBHOOK_URL=${WEBHOOK_URL}
+      - TOKEN=${TOKEN}
+
+    volumes:
+      - "/codebase:/codebase"
+      - "/storage:/storage"
+    restart: always
